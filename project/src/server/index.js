@@ -25,4 +25,27 @@ app.get('/apod', async (req, res) => {
     }
 })
 
+app.get('/rovers', async (req, res) => {
+    try {
+        const url = `https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=${process.env.API_KEY}`
+        let rovers = await fetch(url)
+        rovers = await rovers.json();
+        res.send(rovers)
+    } catch (err) {
+        console.log('error:', err);
+    }
+})
+
+app.get('/rovers/:name', async (req, res) => {
+    try {
+        const cDate = req.query.max_date
+        const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/${req.params.name}/photos?earth_date=${cDate}&api_key=${process.env.API_KEY}`
+        let image = await fetch(url)
+        image = await image.json();
+        res.send(image)
+    } catch (err) {
+        console.log('error:', err);
+    }
+})
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
